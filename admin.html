@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>لوحة إدارة روابط البث | CRESPIAF</title>
+  
+  <meta name="theme-color" content="#261207">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- الخطوط الرسمية: Cairo و Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --primary-earth: #c46822;
+      --primary-earth-dark: #8a3f0a;
+      --accent-gold: #ffd27d;
+      --accent-sand: #faeedc;
+      --bg-dark: #090604;
+      --card-bg: #140d08;
+      --card-border: rgba(212, 120, 43, 0.28);
+      --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-latin: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: var(--font-ar);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* إضاءة خلفية هادئة باللون الترابي */
+    .ambient-glow {
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196, 104, 34, 0.2) 0%, transparent 70%);
+      top: -10%;
+      right: 10%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .admin-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.2rem 1.8rem;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+      position: relative;
+      z-index: 10;
+    }
+
+    @media (max-width: 480px) {
+      .admin-card {
+        padding: 1.6rem 1.25rem;
+        border-radius: 20px;
+      }
+    }
+
+    /* الترويسة */
+    .admin-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+      border-bottom: 1px solid rgba(255, 210, 125, 0.15);
+      padding-bottom: 1.2rem;
+    }
+
+    .badge-status {
+      display: inline-block;
+      background: rgba(196, 104, 34, 0.2);
+      border: 1px solid var(--primary-earth);
+      color: var(--accent-gold);
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 0.35rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .admin-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+      line-height: 1.35;
+    }
+
+    .admin-desc {
+      font-size: 0.84rem;
+      color: #c9b097;
+      line-height: 1.5;
+    }
+
+    /* حقول الروابط */
+    .link-group {
+      margin-bottom: 1.4rem;
+      text-align: right;
+    }
+
+    .link-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+
+    .link-label {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--accent-sand);
+    }
+
+    .test-link-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 210, 125, 0.3);
+      color: var(--accent-gold);
+      font-size: 0.78rem;
+      font-family: inherit;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .test-link-btn:hover {
+      background: rgba(255, 210, 125, 0.15);
+      border-color: var(--accent-gold);
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(212, 120, 43, 0.3);
+      border-radius: 12px;
+      padding: 0.95rem 1.2rem;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      direction: ltr;
+      text-align: left;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 15px rgba(255, 210, 125, 0.25);
+      background: rgba(0, 0, 0, 0.65);
+    }
+
+    .input-field::placeholder {
+      color: #7d6b5c;
+    }
+
+    /* زر التأكيد والحفظ الكبير */
+    .btn-confirm-save {
+      width: 100%;
+      background: linear-gradient(180deg, #c46822 0%, #94420c 100%);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 210, 125, 0.35);
+      border-radius: 14px;
+      padding: 1.05rem 1.5rem;
+      font-family: inherit;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(184, 93, 24, 0.55);
+      transition: var(--transition);
+      margin-top: 0.6rem;
+    }
+
+    .btn-confirm-save:hover {
+      background: linear-gradient(180deg, #d4782b 0%, #aa4c0e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(184, 93, 24, 0.7);
+    }
+
+    .btn-confirm-save:active {
+      transform: translateY(1px);
+    }
+
+    /* خيارات مساعدة في الأسفل */
+    .auxiliary-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1.2rem;
+    }
+
+    .btn-auxiliary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #c9b097;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .btn-auxiliary:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* التنبيه المباشر */
+    .alert-box {
+      padding: 0.9rem 1.2rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      margin-bottom: 1.3rem;
+      display: none;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .alert-success {
+      background: rgba(22, 101, 52, 0.35);
+      border: 1.5px solid #16a34a;
+      color: #86efac;
+    }
+
+    .alert-error {
+      background: rgba(153, 27, 27, 0.35);
+      border: 1.5px solid #dc2626;
+      color: #fca5a5;
+    }
+
+    .timestamp-info {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9c8a7b;
+      margin-top: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <main class="admin-card">
+
+    <header class="admin-header">
+      <div class="badge-status">شاشة التحكم الخاصة بالمسؤول</div>
+      <h1 class="admin-title">تحديث روابط البث المباشر</h1>
+      <p class="admin-desc">
+        أي تعديل تقوم به هنا والضغط على "تأكيد" ينعكس فوراً على جميع الحاضرين والزوار
+      </p>
+    </header>
+
+    <!-- شريط الإشعار الفوري -->
+    <div id="alert-box" class="alert-box"></div>
+
+    <form id="links-form" onsubmit="return false;">
+      
+      <!-- 1. رابط البث باللغة العربية -->
+      <div class="link-group">
+        <div class="link-label-row">
+          <label class="link-label" for="url-ar">رابط البث باللغة العربية</label>
+          <button type="button" class="test-link-btn" onclick="testStream('url-ar')">اختبار الرابط</button>
+        </div>
+        <input type="url" id="url-ar" class="input-field" placeholder="https://www.youtube.com/watch?v=..." required>
+      </div>
+
+      <!-- 2. رابط البث باللغة الفرنسية -->
+      <div class="link-group">
+        <div class="link-label-row">
+          <label class="link-label" for="url-fr">رابط البث باللغة الفرنسية (Français)</label>
+          <button type="button" class="test-link-btn" onclick="testStream('url-fr')">اختبار الرابط</button>
+        </div>
+        <input type="url" id="url-fr" class="input-field" placeholder="https://www.youtube.com/watch?v=..." required>
+      </div>
+
+      <!-- 3. رابط البث باللغة الإنجليزية -->
+      <div class="link-group">
+        <div class="link-label-row">
+          <label class="link-label" for="url-en">رابط البث باللغة الإنجليزية (English)</label>
+          <button type="button" class="test-link-btn" onclick="testStream('url-en')">اختبار الرابط</button>
+        </div>
+        <input type="url" id="url-en" class="input-field" placeholder="https://www.youtube.com/watch?v=..." required>
+      </div>
+
+      <!-- زر التأكيد والحفظ الكبير -->
+      <button id="btn-submit" class="btn-confirm-save" type="button">
+        تأكيد وحفظ التغييرات
+      </button>
+
+      <!-- خيارات مساعدة للمسؤول -->
+      <div class="auxiliary-actions">
+        <a href="index.html" target="_blank" class="btn-auxiliary">
+          معاينة صفحة المستخدمين
+        </a>
+        <button type="button" id="btn-download-json" class="btn-auxiliary">
+          تحميل streams.json
+        </button>
+      </div>
+
+      <div id="timestamp-info" class="timestamp-info">
+        جاري قراءة الروابط المسجلة حالياً...
+      </div>
+
+    </form>
+
+  </main>
+
+  <script>
+    const inputAr = document.getElementById('url-ar');
+    const inputFr = document.getElementById('url-fr');
+    const inputEn = document.getElementById('url-en');
+    const btnSubmit = document.getElementById('btn-submit');
+    const btnDownload = document.getElementById('btn-download-json');
+    const alertBox = document.getElementById('alert-box');
+    const timestampInfo = document.getElementById('timestamp-info');
+
+    // إظهار إشعار للمسؤول
+    function notify(message, isSuccess = true) {
+      alertBox.textContent = message;
+      alertBox.className = 'alert-box ' + (isSuccess ? 'alert-success' : 'alert-error');
+      alertBox.style.display = 'block';
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+      }, 6000);
+    }
+
+    // جلب الروابط الحالية عند فتح الشاشة مباشرة
+    async function loadCurrentLinks() {
+      try {
+        const res = await fetch('streams.json?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.arabic) inputAr.value = data.arabic;
+          if (data.french) inputFr.value = data.french;
+          if (data.english) inputEn.value = data.english;
+          if (data.last_updated) {
+            timestampInfo.textContent = 'آخر تحديث مسجل: ' + data.last_updated;
+          }
+        }
+      } catch (err) {
+        // استرجاع احتياطي من التخزين المحلي
+        const local = localStorage.getItem('crespiaf_streams');
+        if (local) {
+          const data = JSON.parse(local);
+          if (data.arabic) inputAr.value = data.arabic;
+          if (data.french) inputFr.value = data.french;
+          if (data.english) inputEn.value = data.english;
+        }
+        timestampInfo.textContent = 'تم تحميل الروابط المحفوظة مسبقاً.';
+      }
+    }
+
+    // اختبار الرابط في تبويب مستقل
+    function testStream(fieldId) {
+      const url = document.getElementById(fieldId).value.trim();
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        window.open(url, '_blank');
+      } else {
+        alert('الرجاء كتابة رابط صالح يبدأ بـ http:// أو https://');
+      }
+    }
+
+    // عند الضغط على "تأكيد وحفظ التغييرات"
+    btnSubmit.addEventListener('click', async () => {
+      const payload = {
+        arabic: inputAr.value.trim(),
+        french: inputFr.value.trim(),
+        english: inputEn.value.trim()
+      };
+
+      if (!payload.arabic && !payload.french && !payload.english) {
+        notify('الرجاء إدخال رابط واحد على الأقل.', false);
+        return;
+      }
+
+      btnSubmit.textContent = 'جاري الحفظ والتأكيد...';
+      btnSubmit.disabled = true;
+
+      // 1. حفظ في التخزين المحلي (فوري)
+      localStorage.setItem('crespiaf_streams', JSON.stringify({
+        ...payload,
+        last_updated: new Date().toLocaleString()
+      }));
+
+      // 2. إرسال إلى سكربت الخادم save_links.php لتحديث streams.json لجميع الزوار
+      try {
+        const response = await fetch('save_links.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          notify('تم تأكيد وحفظ التغييرات بنجاح! جميع الزوار سيتم توجيههم للروابط الجديدة فوراً.');
+          timestampInfo.textContent = 'آخر تحديث مسجل: ' + (result.updated_at || new Date().toLocaleString());
+        } else {
+          notify('تم الحفظ محلياً: ' + (result.error || 'يرجى تحميل ملف streams.json ورفعه.'), false);
+        }
+      } catch (err) {
+        // في حال كانت الاستضافة ساكنة بدون PHP
+        notify('تم الحفظ بنجاح محلياً! للاستضافات الساكنة اضغط "تحميل streams.json" وارفعه للموقع.', true);
+      } finally {
+        btnSubmit.textContent = 'تأكيد وحفظ التغييرات';
+        btnSubmit.disabled = false;
+      }
+    });
+
+    // تحميل ملف streams.json بضغطة زر كخيار احتياطي
+    btnDownload.addEventListener('click', () => {
+      const data = {
+        arabic: inputAr.value.trim() || 'https://www.youtube.com',
+        french: inputFr.value.trim() || 'https://www.youtube.com',
+        english: inputEn.value.trim() || 'https://www.youtube.com',
+        last_updated: new Date().toLocaleString()
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'streams.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      notify('تم تنزيل ملف streams.json بنجاح.');
+    });
+
+    // بدء التحميل عند الفتح
+    loadCurrentLinks();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>ورشة إقليمية لتعزيز القدرات | CRESPIAF - اليونسكو</title>
+  
+  <!-- لون شريط المتصفح باللون الترابي الأصيل للهوية -->
+  <meta name="theme-color" content="#261207">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- الأيقونة الرسمية في شريط التبويبات والمفضلة -->
+  <link rel="icon" type="image/png" href="assets/logos/unesco.png">
+  <link rel="apple-touch-icon" href="assets/logos/unesco.png">
+
+  <!-- وسوم المشاركة الرسمية لمواقع التواصل والواتساب -->
+  <meta property="og:title" content="ورشة إقليمية لتعزيز القدرات | CRESPIAF - اليونسكو">
+  <meta property="og:description" content="لفائدة نقاط الاتصال الوطنية الإفريقية في مجال إعداد التقارير الدورية، في إطار اتفاقية 2003 لصون التراث الثقافي غير المادي - الجزائر، 09 إلى 11 نوفمبر 2026">
+  <meta property="og:image" content="assets/africa_heritage_map.png">
+
+  <!-- الخطوط الرسمية: Cairo و Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* لوحة الألوان الترابية المعتمدة المتوافقة تماماً مع الهوية البصرية لـ CRESPIAF والتراث الإفريقي */
+    :root {
+      --primary-earth: #b85d18;
+      --primary-earth-dark: #8a3f0a;
+      --primary-earth-light: #d4782b;
+      --accent-terracotta: #c24d26;
+      --accent-gold: #ffd27d;
+      --accent-sand: #faeedc;
+      --bg-canvas: #090604;
+      --bg-card: #130d09;
+      --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-latin: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      font-family: var(--font-ar);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* الحاوية المتوافقة مع أبعاد الهاتف والمستوحاة من التصميم المرجعي باللون الترابي */
+    .mobile-screen-wrapper {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.85);
+    }
+
+    @media (min-width: 500px) {
+      body {
+        padding: 1.2rem 1rem;
+      }
+      .mobile-screen-wrapper {
+        min-height: 860px;
+        height: 90vh;
+        max-height: 900px;
+        border-radius: 36px;
+        border: 2px solid rgba(212, 120, 43, 0.25);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9),
+                    0 0 0 1px rgba(255, 255, 255, 0.06);
+      }
+    }
+
+    /* ----------------------------------------------------
+       1. طبقات الخلفية والتموجات الانسيابية باللون الترابي الأصيل
+       ---------------------------------------------------- */
+    .bg-layer-artwork {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 45%, rgba(212, 120, 43, 0.22) 0%, transparent 65%),
+                  linear-gradient(180deg, #3d1b08 0%, #1c0e07 35%, #0e0805 70%, #2c1206 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* التموج الترابي/الصحراوي العلوي الفخم */
+    .wave-top-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 38%;
+      background: linear-gradient(175deg, #994711 0%, #c46822 45%, rgba(196, 104, 34, 0.15) 85%, transparent 100%);
+      clip-path: ellipse(110% 85% at 50% 12%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* إشعاعات الضوء الذهبية الدافئة */
+    .light-rays {
+      position: absolute;
+      top: -10%;
+      left: -20%;
+      right: -20%;
+      height: 45%;
+      background: repeating-conic-gradient(from 0deg at 50% 0%, 
+        rgba(255, 210, 125, 0.05) 0deg 15deg, 
+        transparent 15deg 30deg);
+      opacity: 0.75;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* التموج السفلي المنحني باللون الطيني/الترابي */
+    .wave-bottom-overlay {
+      position: absolute;
+      bottom: 0;
+      left: -10%;
+      right: -10%;
+      height: 28%;
+      background: linear-gradient(190deg, transparent 0%, rgba(184, 93, 24, 0.35) 45%, #4a200a 100%);
+      border-radius: 50% 50% 0 0 / 25% 25% 0 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .dot-pattern-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24%;
+      background-image: radial-gradient(rgba(255, 210, 125, 0.16) 1.5px, transparent 1.5px);
+      background-size: 14px 14px;
+      opacity: 0.65;
+      mask-image: linear-gradient(to top, black 50%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, black 50%, transparent 100%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* ----------------------------------------------------
+       2. حاوية المحتوى وشاشات التطبيق
+       ---------------------------------------------------- */
+    .screen-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: max(1.2rem, env(safe-area-inset-top)) 1.25rem max(1.2rem, env(safe-area-inset-bottom)) 1.25rem;
+    }
+
+    @media (min-width: 500px) {
+      .screen-content {
+        min-height: 100%;
+        height: 100%;
+        padding: 1.6rem 1.4rem 1.4rem 1.4rem;
+      }
+    }
+
+    .screen-pane {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      width: 100%;
+      transition: var(--transition-smooth);
+    }
+
+    .screen-hidden {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .screen-active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      animation: screenEnter 0.35s ease forwards;
+    }
+
+    @keyframes screenEnter {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ----------------------------------------------------
+       3. الجزء العلوي: الشعارات والعناوين الترابية الرسمية
+       ---------------------------------------------------- */
+    .top-header-block {
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+
+    /* شريط الشعارات الشفاف المكبر 50% بدون أي خلفية بيضاء */
+    .official-logos-capsule {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0.2rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(0.4rem, 2vw, 0.9rem);
+      margin: 0 auto 1.1rem auto;
+      width: 100%;
+      max-width: 410px;
+    }
+
+    .logo-item-ministry {
+      height: clamp(48px, 13vw, 58px);
+      width: auto;
+      flex-shrink: 0;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+    }
+
+    .logo-item-crespiaf {
+      height: clamp(40px, 11vw, 48px);
+      max-width: clamp(180px, 48vw, 260px);
+      width: auto;
+      flex-shrink: 1;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+    }
+
+    .logo-item-unesco {
+      height: clamp(42px, 12vw, 52px);
+      width: auto;
+      flex-shrink: 0;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+    }
+
+    /* أسماء المؤسسات المنظمة بألوان رملية دافئة */
+    .organizers-info {
+      font-size: 0.82rem;
+      color: var(--accent-sand);
+      line-height: 1.45;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    .organizers-info .primary-org {
+      font-weight: 800;
+      color: #ffffff;
+      display: block;
+      font-size: 0.92rem;
+    }
+
+    .organizers-info .partner-org {
+      font-weight: 600;
+      color: #ebd7c1;
+      display: block;
+      font-size: 0.78rem;
+    }
+
+    /* وسم تاريخ ومكان الورشة باللون الطيني الدافئ */
+    .workshop-date-badge {
+      display: inline-block;
+      background: rgba(194, 77, 38, 0.25);
+      border: 1.5px solid var(--accent-terracotta);
+      color: #ffffff;
+      padding: 0.32rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* العنوان الرئيسي للورشة */
+    .workshop-main-title {
+      font-size: clamp(1.25rem, 4.2vw, 1.5rem);
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 0.4rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
+    }
+
+    /* موضوع الورشة والهدف المعتمد بلون ذهبي ترابي */
+    .workshop-topic-desc {
+      font-size: 0.84rem;
+      color: var(--accent-gold);
+      line-height: 1.45;
+      font-weight: 700;
+      max-width: 390px;
+      margin: 0 auto;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* ----------------------------------------------------
+       4. الجزء الأوسط: خريطة إفريقيا الشفافة
+       ---------------------------------------------------- */
+    .center-visual-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+
+    .map-presentation-frame {
+      width: 100%;
+      max-width: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .map-png-transparent {
+      width: 100%;
+      height: auto;
+      max-height: 250px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.85));
+      transition: transform 0.35s ease;
+    }
+
+    .map-presentation-frame:hover .map-png-transparent {
+      transform: scale(1.03);
+    }
+
+    /* ----------------------------------------------------
+       5. الجزء السفلي: زر الدخول الترابي الدافئ ومعلومات الاتصال
+       ---------------------------------------------------- */
+    .bottom-action-block {
+      width: 100%;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    /* زر الدخول بلون ترابي/مغاربي دافئ ينسجم تماماً مع الهوية البصرية */
+    .btn-earth-pill {
+      width: 100%;
+      min-height: 52px;
+      background: linear-gradient(180deg, #c46822 0%, #94420c 100%);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 210, 125, 0.35);
+      border-radius: 14px;
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font-ar);
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(184, 93, 24, 0.55),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .btn-earth-pill:hover {
+      background: linear-gradient(180deg, #d4782b 0%, #aa4c0e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(184, 93, 24, 0.7);
+    }
+
+    .btn-earth-pill:active {
+      transform: translateY(1px);
+    }
+
+    .btn-sub-latin {
+      font-family: var(--font-latin);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      opacity: 0.95;
+      margin-top: 0.15rem;
+      color: #faeedc;
+    }
+
+    /* بيانات التواصل والمقر الرسمي بتدرجات رملية هادئة */
+    .poster-contact-footer {
+      font-size: 0.72rem;
+      color: #c9b097;
+      margin-top: 0.75rem;
+      line-height: 1.5;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+      font-weight: 600;
+    }
+
+    .contact-item-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-row a {
+      color: #ffd27d;
+      text-decoration: none;
+    }
+
+    .contact-address {
+      font-size: 0.68rem;
+      color: #a89279;
+    }
+
+    /* ----------------------------------------------------
+       6. الشاشة الثانية: اختيار لغة الترجمة والبث المباشر
+       ---------------------------------------------------- */
+    .languages-center-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      margin: 0.8rem 0;
+    }
+
+    .lang-prompt-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .lang-prompt-sub {
+      font-family: var(--font-latin);
+      font-size: 0.78rem;
+      color: #ebd7c1;
+      text-align: center;
+      margin-bottom: 1.4rem;
+      font-weight: 600;
+    }
+
+    .languages-cards-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      width: 100%;
+    }
+
+    /* بطاقة اللغة الترابية الزجاجية */
+    .lang-row-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(35, 20, 13, 0.78);
+      border: 1.5px solid rgba(220, 140, 60, 0.25);
+      border-radius: 14px;
+      padding: 0.95rem 1.25rem;
+      text-decoration: none;
+      color: #ffffff;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .lang-row-btn:hover {
+      background: rgba(184, 93, 24, 0.45);
+      border-color: #ffd27d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .lang-row-btn:active {
+      transform: translateY(1px);
+    }
+
+    .lang-row-text {
+      text-align: right;
+    }
+
+    .lang-name-bold {
+      font-size: 1.15rem;
+      font-weight: 800;
+      display: block;
+      color: #ffffff;
+    }
+
+    .lang-desc-light {
+      font-size: 0.78rem;
+      color: #ebd7c1;
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .lang-action-badge-pill {
+      background: #ffd27d;
+      color: #2e1406;
+      font-size: 0.82rem;
+      font-weight: 900;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: var(--transition-smooth);
+    }
+
+    .lang-row-btn:hover .lang-action-badge-pill {
+      background: #ffffff;
+      color: #94420c;
+      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+    }
+
+    .font-latin {
+      font-family: var(--font-latin);
+    }
+
+    /* زر العودة النصي الخالص */
+    .btn-back-pill {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(220, 140, 60, 0.35);
+      color: #ffffff;
+      font-family: var(--font-ar);
+      font-size: 0.92rem;
+      font-weight: 800;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 1.2rem;
+      transition: var(--transition-smooth);
+      display: inline-block;
+    }
+
+    .btn-back-pill:hover {
+      background: rgba(184, 93, 24, 0.35);
+      border-color: #ffd27d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- حاوية شاشة الهاتف المتناسقة مع الهوية الترابية -->
+  <main class="mobile-screen-wrapper">
+
+    <!-- طبقات التموجات الترابية العلوية والسفلية -->
+    <div class="bg-layer-artwork"></div>
+    <div class="light-rays"></div>
+    <div class="wave-top-overlay"></div>
+    <div class="wave-bottom-overlay"></div>
+    <div class="dot-pattern-overlay"></div>
+
+    <!-- المحتوى الداخلي الرئيسي -->
+    <div class="screen-content">
+
+      <!-- ========================================================
+           الشاشة الأولى: شاشة الترحيب الرسمية للورشة باللون الترابي
+           ======================================================== -->
+      <section id="screen-welcome" class="screen-pane screen-active">
+
+        <!-- الجزء العلوي: الشعارات والمؤسسات المنظمة للورشة -->
+        <header class="top-header-block">
+          
+          <!-- شريط الشعارات الشفاف المكبر 50% بدون أي خلفية بيضاء -->
+          <div class="official-logos-capsule">
+            <img src="assets/logos/ministere_culture_algerie.png" alt="وزارة الثقافة والفنون الجزائرية" class="logo-item-ministry">
+            <img src="assets/logos/crespiaf_ar.png" alt="CRESPIAF" class="logo-item-crespiaf">
+            <img src="assets/logos/unesco.png" alt="UNESCO" class="logo-item-unesco">
+          </div>
+
+          <!-- الجهات المنظمة والداعمة بالتدقيق -->
+          <div class="organizers-info">
+            <span class="primary-org">المركز الإقليمي بالجزائر لصون التراث الثقافي غير المادي في إفريقيا</span>
+            <span class="partner-org">بالتعاون مع منظمة اليونسكو • وبدعم من مركز CNRPAH</span>
+          </div>
+
+          <!-- تاريخ الفعالية -->
+          <div class="workshop-date-badge">
+            من 09 إلى 11 نوفمبر 2026
+          </div>
+
+          <!-- عنوان الفعالية الرئيسي -->
+          <h1 class="workshop-main-title">
+            ورشة إقليمية لتعزيز القدرات
+          </h1>
+          
+          <!-- موضوع ونطاق الورشة كما في الملصق -->
+          <p class="workshop-topic-desc">
+            لفائدة نقاط الاتصال الوطنية الإفريقية في مجال إعداد التقارير الدورية، في إطار اتفاقية 2003 لصون التراث الثقافي غير المادي
+          </p>
+
+        </header>
+
+        <!-- الجزء الأوسط: خريطة إفريقيا الشفافة المفرغة بالكامل -->
+        <div class="center-visual-block">
+          <div class="map-presentation-frame">
+            <img src="assets/africa_heritage_map.png" alt="خريطة التراث الثقافي غير المادي في إفريقيا" class="map-png-transparent">
+          </div>
+        </div>
+
+        <!-- الجزء السفلي: زر الدخول الترابي ومعلومات الاتصال الرسمية -->
+        <div class="bottom-action-block">
+          
+          <!-- زر الدخول باللون الترابي الدافئ المتناسق مع الهوية -->
+          <button id="btn-enter" class="btn-earth-pill" type="button" aria-label="دخول لاختيار لغة البث المباشر">
+            <span>دخول</span>
+            <span class="btn-sub-latin">ACCÈS • ENTER</span>
+          </button>
+
+          <!-- بيانات التواصل والمقر الرسمي للورشة من الملصق -->
+          <footer class="poster-contact-footer">
+            <div class="contact-item-row">
+              <span>crespiaf.org</span>
+              <span>•</span>
+              <span>pci.afrique@gmail.com</span>
+              <span>•</span>
+              <span>028174466</span>
+            </div>
+            <div class="contact-address">
+              01 rue rabah midat, 4 étage porte droite, ALGER
+            </div>
+          </footer>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================
+           الشاشة الثانية: شاشة لغات الترجمة والبث المباشر
+           ======================================================== -->
+      <section id="screen-languages" class="screen-pane screen-hidden">
+
+        <!-- ترويسة شاشة اللغات -->
+        <header class="top-header-block">
+          <div class="official-logos-capsule">
+            <img src="assets/logos/ministere_culture_algerie.png" alt="وزارة الثقافة والفنون الجزائرية" class="logo-item-ministry">
+            <img src="assets/logos/crespiaf_ar.png" alt="CRESPIAF" class="logo-item-crespiaf">
+            <img src="assets/logos/unesco.png" alt="UNESCO" class="logo-item-unesco">
+          </div>
+          <div class="workshop-date-badge">
+            ورشة إقليمية لتعزيز القدرات • 09-11 نوفمبر 2026
+          </div>
+        </header>
+
+        <!-- قائمة اللغات الثلاث بتدرجات ترابية فخمة -->
+        <div class="languages-center-box">
+          <h2 class="lang-prompt-title">اختر لغة البث والترجمة</h2>
+          <p class="lang-prompt-sub">Veuillez choisir la langue / Select your language</p>
+
+          <div class="languages-cards-group">
+
+            <!-- 1. البث باللغة العربية -->
+            <a id="stream-ar" href="#" class="lang-row-btn" target="_blank" rel="noopener noreferrer">
+              <div class="lang-row-text">
+                <span class="lang-name-bold">اللغة العربية</span>
+                <span class="lang-desc-light">البث المباشر والترجمة الفورية باللغة العربية</span>
+              </div>
+              <span class="lang-action-badge-pill">مشاهدة</span>
+            </a>
+
+            <!-- 2. البث باللغة الفرنسية -->
+            <a id="stream-fr" href="#" class="lang-row-btn" target="_blank" rel="noopener noreferrer">
+              <div class="lang-row-text">
+                <span class="lang-name-bold font-latin">Français</span>
+                <span class="lang-desc-light font-latin">Diffusion en direct et interprétation en français</span>
+              </div>
+              <span class="lang-action-badge-pill font-latin">Accéder</span>
+            </a>
+
+            <!-- 3. البث باللغة الإنجليزية -->
+            <a id="stream-en" href="#" class="lang-row-btn" target="_blank" rel="noopener noreferrer">
+              <div class="lang-row-text">
+                <span class="lang-name-bold font-latin">English</span>
+                <span class="lang-desc-light font-latin">Live stream & simultaneous interpretation</span>
+              </div>
+              <span class="lang-action-badge-pill font-latin">Watch</span>
+            </a>
+
+          </div>
+
+          <!-- زر العودة النصي الخالص -->
+          <div style="text-align: center;">
+            <button id="btn-back" class="btn-back-pill" type="button">
+              العودة • Retour • Back
+            </button>
+          </div>
+        </div>
+
+        <!-- التذييل في شاشة اللغات -->
+        <div class="bottom-action-block">
+          <footer class="poster-contact-footer">
+            <div class="contact-item-row">
+              <span>crespiaf.org</span>
+              <span>•</span>
+              <span>pci.afrique@gmail.com</span>
+            </div>
+          </footer>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    /**
+     * =========================================================================
+     * مزامنة روابط البث المباشر فورياً من ملف streams.json
+     * =========================================================================
+     */
+    let currentLinks = {
+      arabic: "https://www.youtube.com",
+      french: "https://www.youtube.com",
+      english: "https://www.youtube.com"
+    };
+
+    const linkAr = document.getElementById('stream-ar');
+    const linkFr = document.getElementById('stream-fr');
+    const linkEn = document.getElementById('stream-en');
+
+    // دالة جلب الروابط الحية المحدثة بدون كاش
+    async function syncStreamLinks() {
+      try {
+        const res = await fetch('streams.json?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.arabic) currentLinks.arabic = data.arabic;
+          if (data.french) currentLinks.french = data.french;
+          if (data.english) currentLinks.english = data.english;
+        }
+      } catch (err) {
+        try {
+          const local = localStorage.getItem('crespiaf_streams');
+          if (local) {
+            const data = JSON.parse(local);
+            if (data.arabic) currentLinks.arabic = data.arabic;
+            if (data.french) currentLinks.french = data.french;
+            if (data.english) currentLinks.english = data.english;
+          }
+        } catch(e) {}
+      }
+
+      // تعيين الروابط للأزرار
+      if (linkAr) linkAr.href = currentLinks.arabic;
+      if (linkFr) linkFr.href = currentLinks.french;
+      if (linkEn) linkEn.href = currentLinks.english;
+    }
+
+    // جلب الروابط الحية فور فتح الصفحة
+    syncStreamLinks();
+
+    // عناصر الشاشات والأزرار
+    const screenWelcome = document.getElementById('screen-welcome');
+    const screenLanguages = document.getElementById('screen-languages');
+    const btnEnter = document.getElementById('btn-enter');
+    const btnBack = document.getElementById('btn-back');
+
+    // الانتقال لشاشة اللغات وجلب أحدث الروابط لحظياً
+    btnEnter.addEventListener('click', function () {
+      syncStreamLinks();
+
+      screenWelcome.classList.remove('screen-active');
+      screenWelcome.classList.add('screen-hidden');
+
+      setTimeout(function () {
+        screenLanguages.classList.remove('screen-hidden');
+        screenLanguages.classList.add('screen-active');
+      }, 120);
+    });
+
+    // العودة لشاشة الترحيب عند الضغط على "العودة"
+    btnBack.addEventListener('click', function () {
+      screenLanguages.classList.remove('screen-active');
+      screenLanguages.classList.add('screen-hidden');
+
+      setTimeout(function () {
+        screenWelcome.classList.remove('screen-hidden');
+        screenWelcome.classList.add('screen-active');
+      }, 120);
+    });
+  </script>
+
+</body>
+</html>
