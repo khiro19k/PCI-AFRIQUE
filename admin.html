@@ -338,7 +338,22 @@
 
   </main>
 
+  <!-- مكتبة Supabase للتحديث السحابي الفوري -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    const SUPABASE_URL = "https://qwertfomjjqkfalddzee.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5xfi0tqvLtKFVnEEquHbLQ_yvvaAn1L";
+
+    let supabaseClient = null;
+    if (window.supabase) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      } catch (e) {
+        console.warn('Supabase init error:', e);
+      }
+    }
+
     const inputAr = document.getElementById('url-ar');
     const inputFr = document.getElementById('url-fr');
     const inputEn = document.getElementById('url-en');
@@ -357,8 +372,32 @@
       }, 6000);
     }
 
-    // جلب الروابط الحالية عند فتح الشاشة مباشرة
+    // جلب الروابط الحالية عند فتح الشاشة
     async function loadCurrentLinks() {
+      // 1. محاولة القراءة من Supabase
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('streams')
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+          if (data && !error) {
+            if (data.arabic) inputAr.value = data.arabic;
+            if (data.french) inputFr.value = data.french;
+            if (data.english) inputEn.value = data.english;
+            if (data.updated_at) {
+              timestampInfo.textContent = 'آخر تحديث مسجل في Supabase: ' + new Date(data.updated_at).toLocaleString();
+            }
+            return;
+          }
+        } catch (e) {
+          console.warn('تعذر القراءة من Supabase:', e);
+        }
+      }
+
+      // 2. الجلب الاحتياطي من streams.json
       try {
         const res = await fetch('streams.json?t=' + Date.now(), { cache: 'no-store' });
         if (res.ok) {
@@ -371,7 +410,6 @@
           }
         }
       } catch (err) {
-        // استرجاع احتياطي من التخزين المحلي
         const local = localStorage.getItem('crespiaf_streams');
         if (local) {
           const data = JSON.parse(local);
@@ -379,7 +417,6 @@
           if (data.french) inputFr.value = data.french;
           if (data.english) inputEn.value = data.english;
         }
-        timestampInfo.textContent = 'تم تحميل الروابط المحفوظة مسبقاً.';
       }
     }
 
@@ -406,37 +443,56 @@
         return;
       }
 
-      btnSubmit.textContent = 'جاري الحفظ والتأكيد...';
+      btnSubmit.textContent = 'جاري الحفظ السحابي والتأكيد...';
       btnSubmit.disabled = true;
 
-      // 1. حفظ في التخزين المحلي (فوري)
+      // 1. حفظ فوري في قاعدة بيانات Supabase السحابية
+      let supabaseSuccess = false;
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('streams')
+            .upsert({
+              id: 1,
+              arabic: payload.arabic || 'https://www.youtube.com',
+              french: payload.french || 'https://www.youtube.com',
+              english: payload.english || 'https://www.youtube.com',
+              updated_at: new Date().toISOString()
+            });
+
+          if (!error) {
+            supabaseSuccess = true;
+          } else {
+            console.warn('Supabase upsert error:', error);
+          }
+        } catch (err) {
+          console.warn('Supabase request failed:', err);
+        }
+      }
+
+      // 2. حفظ محلي واحتياطي
       localStorage.setItem('crespiaf_streams', JSON.stringify({
         ...payload,
         last_updated: new Date().toLocaleString()
       }));
 
-      // 2. إرسال إلى سكربت الخادم save_links.php لتحديث streams.json لجميع الزوار
+      // محاولة حفظ احتياطية في save_links.php إن وجد خادم PHP
       try {
-        const response = await fetch('save_links.php', {
+        await fetch('save_links.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+      } catch (e) {}
 
-        const result = await response.json();
+      btnSubmit.textContent = 'تأكيد وحفظ التغييرات';
+      btnSubmit.disabled = false;
 
-        if (response.ok && result.success) {
-          notify('تم تأكيد وحفظ التغييرات بنجاح! جميع الزوار سيتم توجيههم للروابط الجديدة فوراً.');
-          timestampInfo.textContent = 'آخر تحديث مسجل: ' + (result.updated_at || new Date().toLocaleString());
-        } else {
-          notify('تم الحفظ محلياً: ' + (result.error || 'يرجى تحميل ملف streams.json ورفعه.'), false);
-        }
-      } catch (err) {
-        // في حال كانت الاستضافة ساكنة بدون PHP
-        notify('تم الحفظ بنجاح محلياً! للاستضافات الساكنة اضغط "تحميل streams.json" وارفعه للموقع.', true);
-      } finally {
-        btnSubmit.textContent = 'تأكيد وحفظ التغييرات';
-        btnSubmit.disabled = false;
+      if (supabaseSuccess) {
+        notify('تم تأكيد وحفظ التغييرات في Supabase بنجاح! جميع الأجهزة حول العالم ستتلقى التحديث فوراً.');
+        timestampInfo.textContent = 'آخر تحديث مسجل في Supabase: ' + new Date().toLocaleString();
+      } else {
+        notify('تم الحفظ بنجاح! (إذا لم تنشئ جدول streams بعد في Supabase، يرجى تشغيل كود SQL ليعمل التحديث السحابي الكامل).', true);
       }
     });
 

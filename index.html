@@ -721,12 +721,27 @@
     </div>
   </main>
 
+  <!-- مكتبة Supabase للتحديث السحابي اللحظي -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     /**
      * =========================================================================
-     * مزامنة روابط البث المباشر فورياً من ملف streams.json
+     * مزامنة روابط البث المباشر سحابياً عبر Supabase
      * =========================================================================
      */
+    const SUPABASE_URL = "https://qwertfomjjqkfalddzee.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5xfi0tqvLtKFVnEEquHbLQ_yvvaAn1L";
+
+    let supabaseClient = null;
+    if (window.supabase) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      } catch (err) {
+        console.warn('Supabase init error:', err);
+      }
+    }
+
     let currentLinks = {
       arabic: "https://www.youtube.com",
       french: "https://www.youtube.com",
@@ -737,8 +752,33 @@
     const linkFr = document.getElementById('stream-fr');
     const linkEn = document.getElementById('stream-en');
 
-    // دالة جلب الروابط الحية المحدثة بدون كاش
+    // دالة جلب الروابط الحية المحدثة
     async function syncStreamLinks() {
+      // 1. محاولة الجلب السحابي من Supabase
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('streams')
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+          if (data && !error) {
+            if (data.arabic) currentLinks.arabic = data.arabic;
+            if (data.french) currentLinks.french = data.french;
+            if (data.english) currentLinks.english = data.english;
+
+            if (linkAr) linkAr.href = currentLinks.arabic;
+            if (linkFr) linkFr.href = currentLinks.french;
+            if (linkEn) linkEn.href = currentLinks.english;
+            return;
+          }
+        } catch (err) {
+          console.warn('Supabase fetch failed, falling back:', err);
+        }
+      }
+
+      // 2. الجلب الاحتياطي من streams.json
       try {
         const res = await fetch('streams.json?t=' + Date.now(), { cache: 'no-store' });
         if (res.ok) {
@@ -767,6 +807,22 @@
 
     // جلب الروابط الحية فور فتح الصفحة
     syncStreamLinks();
+
+    // الاستماع الحي الفوري للتغييرات عبر Supabase Realtime
+    if (supabaseClient) {
+      try {
+        supabaseClient
+          .channel('realtime_streams')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'streams' }, function (payload) {
+            if (payload.new) {
+              if (payload.new.arabic && linkAr) linkAr.href = payload.new.arabic;
+              if (payload.new.french && linkFr) linkFr.href = payload.new.french;
+              if (payload.new.english && linkEn) linkEn.href = payload.new.english;
+            }
+          })
+          .subscribe();
+      } catch (e) {}
+    }
 
     // عناصر الشاشات والأزرار
     const screenWelcome = document.getElementById('screen-welcome');
