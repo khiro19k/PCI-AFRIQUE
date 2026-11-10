@@ -556,7 +556,7 @@
       padding: 0.75rem 2rem;
       border-radius: 12px;
       cursor: pointer;
-      margin-top: 1.2rem;
+      margin-top: 1rem;
       transition: var(--transition-smooth);
       display: inline-block;
     }
@@ -564,6 +564,73 @@
     .btn-back-pill:hover {
       background: rgba(184, 93, 24, 0.35);
       border-color: #ffd27d;
+    }
+
+    /* قسم تحميل ملفات برنامج الورشة (فرنسية وإنجليزية) */
+    .program-docs-section {
+      margin-top: 1.1rem;
+      padding-top: 0.95rem;
+      border-top: 1px solid rgba(220, 140, 60, 0.25);
+      width: 100%;
+    }
+
+    .program-docs-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--accent-sand);
+      text-align: center;
+      margin-bottom: 0.65rem;
+      letter-spacing: 0.4px;
+      display: block;
+    }
+
+    .program-docs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+
+    .program-doc-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(35, 20, 13, 0.78);
+      border: 1.5px solid rgba(220, 140, 60, 0.35);
+      border-radius: 12px;
+      padding: 0.65rem 0.8rem;
+      text-decoration: none;
+      color: #ffffff;
+      transition: var(--transition-smooth);
+      text-align: center;
+    }
+
+    .program-doc-link:hover {
+      background: rgba(184, 93, 24, 0.45);
+      border-color: #ffd27d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .program-doc-link:active {
+      transform: translateY(1px);
+    }
+
+    .doc-lang-tag {
+      font-family: var(--font-latin);
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #ffd27d;
+      display: block;
+    }
+
+    .doc-action-text {
+      font-family: var(--font-latin);
+      font-size: 0.7rem;
+      color: #ebd7c1;
+      display: block;
+      margin-top: 0.15rem;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -704,6 +771,26 @@
               <span class="lang-action-badge-pill font-latin">Watch</span>
             </a>
 
+          </div>
+
+          <!-- قسم تحميل برنامج الورشة بالفرنسية والإنجليزية -->
+          <div class="program-docs-section">
+            <span class="program-docs-title">برنامج الورشة • Programme • Program</span>
+            <div class="program-docs-grid">
+
+              <!-- 1. البرنامج باللغة الفرنسية -->
+              <a href="assets/docs/programme_fr.pdf" class="program-doc-link" target="_blank" rel="noopener noreferrer">
+                <span class="doc-lang-tag">Français (PDF)</span>
+                <span class="doc-action-text">Consulter le programme</span>
+              </a>
+
+              <!-- 2. البرنامج باللغة الإنجليزية -->
+              <a href="assets/docs/programme_en.pdf" class="program-doc-link" target="_blank" rel="noopener noreferrer">
+                <span class="doc-lang-tag">English (PDF)</span>
+                <span class="doc-action-text">View workshop agenda</span>
+              </a>
+
+            </div>
           </div>
 
           <!-- زر العودة النصي الخالص -->
